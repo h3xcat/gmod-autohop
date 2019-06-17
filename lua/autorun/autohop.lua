@@ -5,16 +5,6 @@ end
 AutoHop = AutoHop or {}
 
 
--- Declare local variables
-local gf = {}
-local clamp = math.Clamp
-local frameTime = FrameTime
-local localPlayer = LocalPlayer
-
-local bNot, bAnd, bOr = bit.bnot, bit.band, bit.bor
-
-
-
 
 local CVars = {}
 
@@ -26,46 +16,15 @@ end
 AutoHop.CVars = CVars
 
 
-hook.Add( "Initialize", "AutoHop", function()
 
-    if GAMEMODE_NAME == "terrortown" then 
-        CVars.autohop_ttt_detective = CreateConVar( "autohop_ttt_detective", "0", FCVAR_SERVER_CAN_EXECUTE+FCVAR_REPLICATED+FCVAR_ARCHIVE )
-        CVars.autohop_ttt_traitor = CreateConVar( "autohop_ttt_traitor", "0", FCVAR_SERVER_CAN_EXECUTE+FCVAR_REPLICATED+FCVAR_ARCHIVE )    
+local gf = {}
+local clamp = math.Clamp
+local frameTime = FrameTime
+local localPlayer = LocalPlayer
+local bNot, bAnd, bOr = bit.bnot, bit.band, bit.bor
 
-        EQUIP_AUTOHOP = GenerateNewEquipmentID()
-
-        if CVars.autohop_ttt_detective:GetBool() then
-            table.insert(EquipmentItems[ROLE_DETECTIVE], 
-                {  id       = EQUIP_AUTOHOP,
-                    loadout  = false,
-                    type     = "Passive effect item",
-                    material = "vgui/ttt/icon_autohop",
-                    name     = "AutoHop",
-                    desc     = "Allows you to hop like a bunny."
-                }
-            )
-        end
-
-        if CVars.autohop_ttt_traitor:GetBool() then
-            table.insert(EquipmentItems[ROLE_TRAITOR], 
-                {  id       = EQUIP_AUTOHOP,
-                    loadout  = false,
-                    type     = "Passive effect item",
-                    material = "vgui/ttt/icon_autohop",
-                    name     = "AutoHop",
-                    desc     = "Allows you to hop like a bunny."
-                }
-            )
-        end
-    end
-
-end)
 
 hook.Add("ShouldAutoHop", "AutoHop", function(ply)
-    if GAMEMODE_NAME == "terrortown" and ply:HasEquipmentItem(EQUIP_AUTOHOP) then
-        return true
-    end
-    
     if CVars.autohop_enabled:GetBool() then
         if SERVER and ply:GetInfo( "autohop" ) then
             return true
@@ -73,8 +32,6 @@ hook.Add("ShouldAutoHop", "AutoHop", function(ply)
             return true
         end
     end
-
-    return false
 end)
 
 
